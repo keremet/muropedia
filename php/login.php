@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
+	$error_msg = "";
 	if( isset($_POST['login']) && isset($_POST['passwd'])  ) {
 		include('connect.php'); 
 		$stmt = $db->prepare(
