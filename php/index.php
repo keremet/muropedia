@@ -17,6 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
+ 
+ session_start();
+ if( "1" == $_GET['exit'] )
+	$_SESSION = array();
+ 
  include('connect.php'); ?>
 <html>
  <head>
@@ -24,19 +29,23 @@
   <title>Список песен</title>
  </head>
  <body>
- <a href="add_song.php">Добавить песню</a><br>
+ <? if( isset($_SESSION['uid']) ) {?>
+ <a href="add_song.php">Добавить песню</a> <a href="index.php?exit=1">Выход</a><br>
+ <? } else {?>
+ <a href="login.php">Логин</a><br>
  <?
-		$stmtSinger = $db->prepare("SELECT id, name FROM singer order by name");
-		$stmtSong = $db->prepare("SELECT id, name FROM song WHERE singer_id = ? ORDER BY name");
-		$stmtSinger->execute();
-		while( $rowSinger = $stmtSinger->fetch() )  {
-			echo "<b>".$rowSinger['name']."</b><br>";
-			$stmtSong->execute(array($rowSinger['id']));
-			while( $rowSong = $stmtSong->fetch() )  {
-				echo "<a href='song.php?id=" .$rowSong['id']."'>".$rowSong['name']."</a><br>";
-			}
-			echo "<br>";
+	}
+	$stmtSinger = $db->prepare("SELECT id, name FROM singer order by name");
+	$stmtSong = $db->prepare("SELECT id, name FROM song WHERE singer_id = ? ORDER BY name");
+	$stmtSinger->execute();
+	while( $rowSinger = $stmtSinger->fetch() )  {
+		echo "<b>".$rowSinger['name']."</b><br>";
+		$stmtSong->execute(array($rowSinger['id']));
+		while( $rowSong = $stmtSong->fetch() )  {
+			echo "<a href='song.php?id=" .$rowSong['id']."'>".$rowSong['name']."</a><br>";
 		}
+		echo "<br>";
+	}
 ?>
  </body>
 </html>
