@@ -17,10 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
+session_start();
 include('connect.php');
 
-$stmt = $db->prepare("INSERT INTO singer(name)values(?)");
-if( $stmt->execute(array($_POST['name'])) ) {
+$stmt = $db->prepare("INSERT INTO singer(name, member_id)values(?, ?)");
+if( $stmt->execute(array($_POST['name'], $_SESSION['uid'])) ) {
 	echo "OK";
 } else {
 	http_response_code(500);
