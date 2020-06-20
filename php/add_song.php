@@ -26,24 +26,17 @@ include('connect.php'); ?>
  </head>
  <body>
 <script>
-function add_base(data_name)
+function add_base(data_name, url)
 {
 	var s = prompt("Введите " + data_name, "")
-	if(s == null) return null
+	if(s == null) return
 	if(s == '')
 	{
 		alert(data_name + ' не введено')
-		return null
+		return
 	}
-	return s
-}
-
-function add_singer()
-{
-	var s = add_base("имя исполнителя")
-	if(s == null) return null
 	jQuery.ajax({
-		url:     'save_singer.php', //Адрес подгружаемой страницы
+		url:     url, //Адрес подгружаемой страницы
 		type:     "POST", //Тип запроса
 		dataType: "html", //Тип данных
 		data: {
@@ -55,16 +48,11 @@ function add_singer()
 		error: function(response) { //Если ошибка
 			alert(response);
 		}
-	});	
+	});
 }
 
-function add_author()
-{
-	var s = add_base("имя автора")
-	if(s == null) return null
-	alert('имя автора ' + s)
-}
-
+function add_singer()  { add_base("имя исполнителя", "save_singer.php"); }
+function add_author() {	add_base("имя автора", "save_author.php"); }
 </script>
  <a href="index.php">Список песен</a><br>
   <form action="save_song.php" method="post">
@@ -87,7 +75,7 @@ function add_author()
 			echo "<option value='".$row['id']."'>".$row['name']."</option>";
 	?>
    </select><input type="submit" onclick="add_author(); return false;" value="Добавить автора"><br>
-   Ссылка на видео: <input required type="text" name="video" value=""><br>
+   Ссылка на видео: <input type="text" name="video" value=""><br>
     <table>
     <tr><td><b>Текст:</b></td><td><b>Перевод:</b></td></tr>
     <tr><td><textarea rows="25" cols="45" name="txt"></textarea></td><td><textarea rows="25" cols="45" name="translation_txt"></textarea></td>
