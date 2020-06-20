@@ -19,7 +19,7 @@
  */
 	include('connect.php'); 
 	$stmt = $db->prepare(
-		"SELECT song.id, song.name, IFNULL(singer.name, 'Неизвестен') singer_name, IFNULL(author.name, 'Неизвестен') author_name, song.txt, song.translation_txt 
+		"SELECT song.id, song.name, IFNULL(singer.name, 'Неизвестен') singer_name, IFNULL(author.name, 'Неизвестен') author_name, song.txt, song.translation_txt, song.video
 		FROM song
 			LEFT JOIN singer ON singer.id = song.singer_id
 			LEFT JOIN author ON author.id = song.author_id
@@ -39,6 +39,7 @@
     <b><?=$row['name'] ?></b><br>
 	Исполнитель: <?=$row['singer_name'] ?><br>
 	Автор слов: <?=$row['author_name'] ?><br><br>
+	Ссылка на видео: <a href="<?=$row['video'] ?>"><?=$row['video'] ?></a><br><br>
     <table border=1>
     <tr><td><b>Текст:</b></td><td><b>Перевод:</b></td></tr>
     <tr><td><?=str_replace("\n", "<br>", $row['txt']) ?></td><td><?=str_replace("\n", "<br>", $row['translation_txt']) ?></td>

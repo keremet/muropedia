@@ -87,6 +87,7 @@ function add_author()
 			echo "<option value='".$row['id']."'>".$row['name']."</option>";
 	?>
    </select><input type="submit" onclick="add_author(); return false;" value="Добавить автора"><br>
+   Ссылка на видео: <input required type="text" name="video" value=""><br>
     <table>
     <tr><td><b>Текст:</b></td><td><b>Перевод:</b></td></tr>
     <tr><td><textarea rows="25" cols="45" name="txt"></textarea></td><td><textarea rows="25" cols="45" name="translation_txt"></textarea></td>

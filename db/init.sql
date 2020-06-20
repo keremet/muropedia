@@ -28,6 +28,7 @@ CREATE TABLE song (
   `author_id`int(11),
   `txt` text COLLATE utf8_unicode_ci NOT NULL,
   `translation_txt` text COLLATE utf8_unicode_ci,
+  `video` text COLLATE utf8_unicode_ci,
   `member_id` int(11) NOT NULL,
   `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT `song__singer_id` FOREIGN KEY (`singer_id`) REFERENCES `singer` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
