@@ -35,7 +35,7 @@
  <a href="login.php">Логин</a><br>
  <?
 	}
-	$stmtSinger = $db->prepare("SELECT id, name FROM singer order by name");
+	$stmtSinger = $db->prepare("SELECT id, name FROM singer ORDER BY name");
 	$stmtSong = $db->prepare("SELECT id, name FROM song WHERE singer_id = ? ORDER BY name");
 	$stmtSinger->execute();
 	while( $rowSinger = $stmtSinger->fetch() )  {
@@ -45,6 +45,13 @@
 			echo "<a href='song.php?id=" .$rowSong['id']."'>".$rowSong['name']."</a><br>";
 		}
 		echo "<br>";
+	}
+	
+	echo "<b>Неизвестный</b><br>";
+	$stmtSong = $db->prepare("SELECT id, name FROM song WHERE singer_id IS NULL ORDER BY name");
+	$stmtSong->execute(array($rowSinger['id']));
+	while( $rowSong = $stmtSong->fetch() )  {
+		echo "<a href='song.php?id=" .$rowSong['id']."'>".$rowSong['name']."</a><br>";
 	}
 ?>
  </body>
