@@ -19,7 +19,7 @@
  */
  
  session_start();
- if( "1" == $_GET['exit'] )
+ if( isset($_GET['exit']) )
 	$_SESSION = array();
  
  include('connect.php'); ?>
