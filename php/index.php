@@ -30,7 +30,7 @@
  </head>
  <body>
  <? if( isset($_SESSION['uid']) ) {?>
- <a href="add_song.php">Добавить песню</a> <a href="index.php?exit=1">Выход</a><br>
+ <a href="edit_song.php">Добавить песню</a> <a href="index.php?exit=1">Выход</a><br>
  <? } else {?>
  <a href="login.php">Логин</a><br>
  <?

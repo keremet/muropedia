@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
+	session_start();
 	include('connect.php'); 
 	$stmt = $db->prepare(
 		"SELECT song.id, song.name, IFNULL(singer.name, 'Неизвестен') singer_name, IFNULL(author.name, 'Неизвестен') author_name, song.txt, song.translation_txt, song.video
@@ -35,7 +36,13 @@
   <script type="text/javascript" src="jquery-1.10.1.min.js"></script>
  </head>
  <body>
-   <a href="index.php">Список песен</a><br>
+   <a href="index.php">Список песен</a>
+   <? if( isset($_SESSION['uid']) ) {?>
+ <a href="edit_song.php?id=<?=$_GET['id']?>">Редактировать песню</a> <a href="index.php?exit=1">Выход</a>
+ <? } else {?> 
+ <a href="login.php">Вход для редактирования</a>
+ <? } ?>
+   <br>
     <b><?=$row['name'] ?></b><br>
 	Исполнитель: <?=$row['singer_name'] ?><br>
 	Автор слов: <?=$row['author_name'] ?><br><br>

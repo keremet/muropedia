@@ -19,20 +19,39 @@
  */
 session_start();
 include('connect.php');
-
-$stmt = $db->prepare("INSERT INTO song(name, singer_id, author_id, txt, translation_txt, video, member_id)values(?, ?, ?, ?, ?, ?, ?)");
-if( $stmt->execute(
-		array($_POST['name'], 
-					(0 == $_POST['singer']) ? null : $_POST['singer'],
-					(0 == $_POST['author']) ? null : $_POST['author'],
-					$_POST['txt'],
-					$_POST['translation_txt'],
-					$_POST['video'],
-					$_SESSION['uid'])) ) {
-	header( 'Location: ./song.php?id='.$db->lastInsertId() );
+if( isset($_POST['id']) )
+{
+	$stmt = $db->prepare("UPDATE song SET name=?, singer_id=?, author_id=?, txt=?, translation_txt=?, video=?, member_id=? WHERE id=?");
+	if( $stmt->execute(
+			array($_POST['name'], 
+						(0 == $_POST['singer']) ? null : $_POST['singer'],
+						(0 == $_POST['author']) ? null : $_POST['author'],
+						$_POST['txt'],
+						$_POST['translation_txt'],
+						$_POST['video'],
+						$_SESSION['uid'],
+						$_POST['id'])) ) {
+		header( 'Location: ./song.php?id='.$_POST['id'] );
+	} else {
+		http_response_code(500);
+		$errInfo = $stmt->errorInfo();
+		echo implode($errInfo, ",");
+	}
 } else {
-	http_response_code(500);
-	$errInfo = $stmt->errorInfo();
-	echo implode($errInfo, ",");
+	$stmt = $db->prepare("INSERT INTO song(name, singer_id, author_id, txt, translation_txt, video, member_id)values(?, ?, ?, ?, ?, ?, ?)");
+	if( $stmt->execute(
+			array($_POST['name'], 
+						(0 == $_POST['singer']) ? null : $_POST['singer'],
+						(0 == $_POST['author']) ? null : $_POST['author'],
+						$_POST['txt'],
+						$_POST['translation_txt'],
+						$_POST['video'],
+						$_SESSION['uid'])) ) {
+		header( 'Location: ./song.php?id='.$db->lastInsertId() );
+	} else {
+		http_response_code(500);
+		$errInfo = $stmt->errorInfo();
+		echo implode($errInfo, ",");
+	}
 }
 ?>

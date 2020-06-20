@@ -17,11 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-include('connect.php'); ?>
+include('connect.php'); 
+if( isset($_GET['id']) )
+{
+	$stmt = $db->prepare(
+		"SELECT name,  singer_id, author_id, txt, translation_txt, video
+		FROM song
+		WHERE id = ?");
+	$stmt->execute(array($_GET['id']));
+	if(!($rowSong = $stmt->fetch())) 
+		die("Песня не найдена");
+} else
+	$rowSong = array('name' => "",  'singer_id' => "", 'author_id' => "", 'txt' => "", 'translation_txt' => "", 'video' => "");
+?>
 <html>
  <head>
   <meta charset="utf-8">
-  <title>Редактирование песни</title>
+  <title>Редактирование песни <?=$rowSong['name']?></title>
   <script type="text/javascript" src="jquery-1.10.1.min.js"></script>
  </head>
  <body>
@@ -56,32 +68,35 @@ function add_author() {	add_base("имя автора", "save_author.php"); }
 </script>
  <a href="index.php">Список песен</a><br>
   <form action="save_song.php" method="post">
-    Название: <input required type="text" name="name" value=""><br>
+	<?
+		if( isset($_GET['id']) )
+			echo "<input type='hidden' name='id' value='".$_GET['id']."'>";
+	?>
+	Название: <input required type="text" name="name" size="50" value="<?=$rowSong['name']?>"><br>
 	Исполнитель: <select name="singer">
-    <option value="0">Неизвестный</option>
+	<option value="0">Неизвестный</option>
 	<?
 		$stmt = $db->prepare("SELECT id, name FROM singer ORDER BY name");
 		$stmt->execute();
 		while( $row = $stmt->fetch() ) 
-			echo "<option value='".$row['id']."'>".$row['name']."</option>";
+			echo "<option ".(($row['id'] == $rowSong['singer_id']) ? "selected ": "")."value='".$row['id']."'>".$row['name']."</option>";
 	?>
-   </select><input type="submit" onclick="add_singer(); return false;" value="Добавить исполнителя"><br>
+	</select><input type="submit" onclick="add_singer(); return false;" value="Добавить исполнителя"><br>
 	Автор слов: <select name="author">
     <option value="0">Неизвестный</option>
 	<?
 		$stmt = $db->prepare("SELECT id, name FROM author ORDER BY name");
 		$stmt->execute();
 		while( $row = $stmt->fetch() ) 
-			echo "<option value='".$row['id']."'>".$row['name']."</option>";
+			echo "<option ".(($row['id'] == $rowSong['author_id']) ? "selected ": "")."value='".$row['id']."'>".$row['name']."</option>";
 	?>
-   </select><input type="submit" onclick="add_author(); return false;" value="Добавить автора"><br>
-   Ссылка на видео: <input type="text" name="video" value=""><br>
-    <table>
-    <tr><td><b>Текст:</b></td><td><b>Перевод:</b></td></tr>
-    <tr><td><textarea rows="25" cols="45" name="txt"></textarea></td><td><textarea rows="25" cols="45" name="translation_txt"></textarea></td>
+	</select><input type="submit" onclick="add_author(); return false;" value="Добавить автора"><br>
+	Ссылка на видео: <input type="text" name="video" size="50" value="<?=$rowSong['video']?>"><br>
+	<table>
+	<tr><td><b>Текст:</b></td><td><b>Перевод:</b></td></tr>
+	<tr><td><textarea rows="25" cols="45" name="txt"><?=$rowSong['txt']?></textarea></td><td><textarea rows="25" cols="45" name="translation_txt"><?=$rowSong['translation_txt']?></textarea></td>
 	</table>
-    <p><input type="submit" value="Отправить"></p>
-  </form>
-
+	<p><input type="submit" value="Отправить"></p>
+	</form>
  </body>
 </html>
