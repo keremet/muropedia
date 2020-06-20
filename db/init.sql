@@ -37,14 +37,27 @@ CREATE TABLE song (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE song_hst(
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `song_id` int(11) ,
   `name` text COLLATE utf8_unicode_ci,
   `singer_id`int(11),
   `author_id`int(11),
   `txt` text COLLATE utf8_unicode_ci,
   `translation_txt` text,
-  `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `dt` timestamp,
   member_id int(11) ,
   CONSTRAINT `song_hst__song_id` FOREIGN KEY (`song_id`) REFERENCES `song` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `song_hst__member_id` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DELIMITER $$
+
+CREATE TRIGGER after_song_update
+AFTER UPDATE
+ON song FOR EACH ROW
+BEGIN
+    INSERT INTO song_hst(song_id, name, singer_id, author_id, txt, translation_txt, dt, member_id)
+    VALUES (old.id, old.name, old.singer_id, old.author_id, old.txt, old.translation_txt, old.dt, old.member_id);
+END $$
+
+DELIMITER ;
