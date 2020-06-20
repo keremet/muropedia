@@ -9,6 +9,7 @@ CREATE TABLE singer (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `member_id` int(11) NOT NULL,
+  `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT `singer__member_id` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -16,6 +17,7 @@ CREATE TABLE author (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `member_id` int(11) NOT NULL,
+  `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT `author__member_id` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -27,6 +29,7 @@ CREATE TABLE song (
   `txt` text COLLATE utf8_unicode_ci NOT NULL,
   `translation_txt` text COLLATE utf8_unicode_ci,
   `member_id` int(11) NOT NULL,
+  `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT `song__singer_id` FOREIGN KEY (`singer_id`) REFERENCES `singer` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `song__author_id` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `song__member_id` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
